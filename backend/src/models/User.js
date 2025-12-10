@@ -14,8 +14,8 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['jobseeker', 'employer'],
-        required: true
+        enum: ['jobseeker', 'employer', 'pending'],
+        default: 'pending'
     },
     // 2. common profile info
     name: {
