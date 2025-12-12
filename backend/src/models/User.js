@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const validator = require('validator')
 
 const UserSchema = new mongoose.Schema({
     // 1. The link to Firebase
@@ -10,12 +11,14 @@ const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        uniqur: true
+        unique: true,
+        lowecase: true,
+        validate: [validator.isEmail, 'Please provide a valid email']
     },
     role: {
         type: String,
-        enum: ['jobseeker', 'employer', 'pending'],
-        default: 'pending'
+        enum: ['jobseeker', 'employer'],
+        required: true
     },
     // 2. common profile info
     name: {
@@ -31,17 +34,42 @@ const UserSchema = new mongoose.Schema({
         type: String
     },
     portfolioUrl: {
-        type: String
+        type: String,
+        validate: {
+            validator: function (v) {
+                if (!v) return true
+                return validator.isURL(v)
+            },
+            message: 'Please provide a valid URL'
+        }
     },
     // 4. Employer fields
     companyName: {
         type: String
     },
+    companySize: { type: String },
     location: {
         type: String
     },
     phone: {
-        type: String
+        type: String,
+        required: true,
+        validate: function (v) {
+            return /^(\+251|0)(9|7)[0-9]{8}$/.test(v)
+        },
+        message: props => `${props.value} is not a valid Ethiopian phone number!`
+    },
+    socialLinks: {
+        linkedin: { type: String },
+        github: { type: String },
+        website: { type: String }
+    },
+    headline: { type: String },
+    education: [{ institution: String, degree: String, year: String }],
+    adminReview: {
+        isVerified: { type: Boolean, default: false },
+        rating: { type: Number, min: 1, max: 5 },
+        feedback: { type: String }
     }
 }, { timestamps: true }) // Automatically adds 'createdAt' and 'updatedAt'
 
