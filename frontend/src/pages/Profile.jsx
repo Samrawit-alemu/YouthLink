@@ -1,24 +1,101 @@
-import React, { useState } from 'react';
-import { User, MapPin, Link as LinkIcon, Mail, Phone, Edit, Plus, Github, Linkedin, Globe } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { User, MapPin, Link as LinkIcon, Mail, Phone, Edit, Plus, Github, Linkedin, Globe, FileText, GraduationCap, Download } from 'lucide-react';
+import ProfileForm from '../components/ProfileForm';
+import EmployerProfileForm from '../components/EmployerProfileForm';
+import EmployerProfileView from '../components/EmployerProfileView';
 
 const Profile = () => {
     const [isEditing, setIsEditing] = useState(false);
+    const [userType, setUserType] = useState('seeker'); // 'seeker' or 'employer'
 
-    // Mock User Data
-    const [user, setUser] = useState({
+    // Mock User Data for Seeker
+    const [seekerUser, setSeekerUser] = useState({
         name: "Abel Kebede",
         role: "Student",
         title: "Graphic Design Student @ AAU",
         location: "Addis Ababa, Ethiopia",
         email: "abel.kebede@example.com",
+        phone: "+251 911 000 000",
+        website: "www.abel.design",
         bio: "Passionate graphic designer with experience in branding and illustration. I love creating clean and impactful visual identities.",
         skills: ["Photoshop", "Illustrator", "Figma", "Branding", "Sketching"],
         portfolio: [
             { title: "Coffee Brand Identity", link: "#", type: "Behance" },
             { title: "Event Poster Series", link: "#", type: "Dribbble" }
-        ]
+        ],
+        educations: [
+            { school: "Addis Ababa University", degree: "BFA in Graphic Design", year: "2021 - Present" }
+        ],
+        cv: "Abel_Kebede_Resume.pdf"
     });
 
+    // Mock User Data for Employer
+    const [employerUser, setEmployerUser] = useState({
+        companyName: "TechCorp Ethiopia",
+        industry: "Software Development",
+        size: "51-200",
+        location: "Addis Ababa, Bole",
+        email: "careers@techcorp.et",
+        website: "https://techcorp.et",
+        about: "We are a leading software development company in Ethiopia, focused on building innovative solutions for the African market. We value creativity, collaboration, and continuous learning.",
+        benefits: ["Health Insurance", "Flexible Hours", "Professional Development", "Free Coffee"],
+        logo: null
+    });
+
+    useEffect(() => {
+        // Check for stored profile from SetupProfile
+        const storedType = localStorage.getItem('userType');
+        if (storedType) {
+            setUserType(storedType);
+            const storedProfile = localStorage.getItem('userProfile');
+            if (storedProfile) {
+                if (storedType === 'seeker') {
+                    setSeekerUser(JSON.parse(storedProfile));
+                } else {
+                    setEmployerUser(JSON.parse(storedProfile));
+                }
+            }
+        }
+    }, []);
+
+    const handleSave = (updatedUser) => {
+        if (userType === 'seeker') {
+            setSeekerUser(updatedUser);
+            localStorage.setItem('userProfile', JSON.stringify(updatedUser));
+        } else {
+            setEmployerUser(updatedUser);
+            localStorage.setItem('userProfile', JSON.stringify(updatedUser));
+        }
+        setIsEditing(false);
+    };
+
+    if (isEditing) {
+        return (
+            <div className="bg-slate-50 min-h-screen py-10">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    {userType === 'employer' ? (
+                        <EmployerProfileForm
+                            user={employerUser}
+                            onSave={handleSave}
+                            onCancel={() => setIsEditing(false)}
+                        />
+                    ) : (
+                        <ProfileForm
+                            user={seekerUser}
+                            onSave={handleSave}
+                            onCancel={() => setIsEditing(false)}
+                        />
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+    if (userType === 'employer') {
+        return <EmployerProfileView user={employerUser} onEdit={() => setIsEditing(true)} />;
+    }
+
+    // Default Seeker View
     return (
         <div className="bg-slate-50 min-h-screen py-10">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,7 +103,10 @@ const Profile = () => {
                 {/* Profile Header */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
                     <div className="h-32 bg-primary/10 w-full relative">
-                        <button className="absolute top-4 right-4 p-2 bg-white/50 backdrop-blur-sm rounded-full hover:bg-white transition-colors">
+                        <button
+                            onClick={() => setIsEditing(true)}
+                            className="absolute top-4 right-4 p-2 bg-white/50 backdrop-blur-sm rounded-full hover:bg-white transition-colors"
+                        >
                             <Edit className="h-4 w-4 text-slate-600" />
                         </button>
                     </div>
@@ -39,15 +119,15 @@ const Profile = () => {
 
                         <div className="mt-14 flex flex-col sm:flex-row justify-between items-start gap-4">
                             <div>
-                                <h1 className="text-2xl font-bold text-slate-900">{user.name}</h1>
-                                <p className="text-slate-600 font-medium mb-1">{user.title}</p>
+                                <h1 className="text-2xl font-bold text-slate-900">{seekerUser.name}</h1>
+                                <p className="text-slate-600 font-medium mb-1">{seekerUser.title}</p>
                                 <div className="flex items-center text-sm text-slate-500 mb-4">
-                                    <MapPin className="h-4 w-4 mr-1" /> {user.location}
+                                    <MapPin className="h-4 w-4 mr-1" /> {seekerUser.location}
                                 </div>
 
                                 <div className="flex gap-2">
                                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light/10 text-primary">
-                                        {user.role}
+                                        {seekerUser.role}
                                     </span>
                                 </div>
                             </div>
@@ -55,7 +135,10 @@ const Profile = () => {
                                 <button className="px-4 py-2 border border-gray-300 rounded-lg text-slate-700 hover:bg-slate-50 font-medium transition-colors">
                                     Share Profile
                                 </button>
-                                <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover font-medium shadow-sm transition-colors">
+                                <button
+                                    onClick={() => setIsEditing(true)}
+                                    className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover font-medium shadow-sm transition-colors"
+                                >
                                     Edit Profile
                                 </button>
                             </div>
@@ -72,16 +155,20 @@ const Profile = () => {
                             <div className="space-y-3">
                                 <div className="flex items-center text-sm text-slate-600">
                                     <Mail className="h-4 w-4 mr-3 text-slate-400" />
-                                    {user.email}
+                                    {seekerUser.email}
                                 </div>
-                                <div className="flex items-center text-sm text-slate-600">
-                                    <Phone className="h-4 w-4 mr-3 text-slate-400" />
-                                    +251 911 000 000
-                                </div>
-                                <div className="flex items-center text-sm text-slate-600">
-                                    <Globe className="h-4 w-4 mr-3 text-slate-400" />
-                                    <a href="#" className="text-primary hover:underline">www.abel.design</a>
-                                </div>
+                                {seekerUser.phone && (
+                                    <div className="flex items-center text-sm text-slate-600">
+                                        <Phone className="h-4 w-4 mr-3 text-slate-400" />
+                                        {seekerUser.phone}
+                                    </div>
+                                )}
+                                {seekerUser.website && (
+                                    <div className="flex items-center text-sm text-slate-600">
+                                        <Globe className="h-4 w-4 mr-3 text-slate-400" />
+                                        <a href={seekerUser.website} className="text-primary hover:underline">{seekerUser.website}</a>
+                                    </div>
+                                )}
                             </div>
                             <div className="mt-6 pt-6 border-t border-gray-100 flex gap-4 justify-center">
                                 <a href="#" className="text-slate-400 hover:text-[#0077b5]"><Linkedin className="h-5 w-5" /></a>
@@ -93,15 +180,37 @@ const Profile = () => {
                         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                             <div className="flex justify-between items-center mb-4">
                                 <h3 className="font-semibold text-slate-900">Skills</h3>
-                                <button className="text-primary hover:text-primary-hover"><Plus className="h-4 w-4" /></button>
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                {user.skills.map(skill => (
+                                {seekerUser.skills.map(skill => (
                                     <span key={skill} className="px-3 py-1 bg-slate-100 text-slate-600 text-sm rounded-full">
                                         {skill}
                                     </span>
                                 ))}
                             </div>
+                        </div>
+
+                        {/* CV / Resume Download */}
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <h3 className="font-semibold text-slate-900 mb-4">Resume</h3>
+                            {seekerUser.cv ? (
+                                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-gray-100">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 bg-white rounded-md shadow-sm text-red-500">
+                                            <FileText className="h-5 w-5" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-medium text-slate-900 truncate max-w-[120px]">{seekerUser.cv}</p>
+                                            <p className="text-xs text-slate-500">PDF</p>
+                                        </div>
+                                    </div>
+                                    <button className="text-slate-400 hover:text-primary">
+                                        <Download className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            ) : (
+                                <p className="text-sm text-slate-500 italic">No CV uploaded</p>
+                            )}
                         </div>
                     </div>
 
@@ -110,43 +219,54 @@ const Profile = () => {
                         {/* About */}
                         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                             <h3 className="font-semibold text-slate-900 mb-3">About</h3>
-                            <p className="text-slate-600 leading-relaxed text-sm">
-                                {user.bio}
+                            <p className="text-slate-600 leading-relaxed text-sm whitespace-pre-line">
+                                {seekerUser.bio}
                             </p>
+                        </div>
+
+                        {/* Education */}
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <h3 className="font-semibold text-slate-900 mb-4">Education</h3>
+                            <div className="space-y-6">
+                                {seekerUser.educations && seekerUser.educations.length > 0 ? (
+                                    seekerUser.educations.map((edu, index) => (
+                                        <div key={index} className="flex gap-4">
+                                            <div className="mt-1">
+                                                <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                                                    <GraduationCap className="h-5 w-5" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-medium text-slate-900">{edu.school}</h4>
+                                                <p className="text-sm text-slate-600">{edu.degree}</p>
+                                                <p className="text-xs text-slate-500 mt-1">{edu.year}</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-sm text-slate-500 italic">No education listed</p>
+                                )}
+                            </div>
                         </div>
 
                         {/* Portfolio / Projects */}
                         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="font-semibold text-slate-900">Portfolio</h3>
-                                <button className="text-sm text-primary font-medium hover:underline flex items-center">
-                                    <Plus className="h-4 w-4 mr-1" /> Add Project
-                                </button>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {/* Mock Project Card 1 */}
-                                <div className="group border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
-                                    <div className="h-32 bg-slate-200 relative">
-                                        {/* Placeholder image area */}
-                                        <div className="absolute inset-0 flex items-center justify-center text-slate-400">Project Image</div>
+                                {seekerUser.portfolio.map((project, index) => (
+                                    <div key={index} className="group border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+                                        <div className="h-32 bg-slate-200 relative">
+                                            <div className="absolute inset-0 flex items-center justify-center text-slate-400">Project Image</div>
+                                        </div>
+                                        <div className="p-4">
+                                            <h4 className="font-semibold text-slate-900 group-hover:text-primary transition-colors">{project.title}</h4>
+                                            <span className="text-xs text-slate-500">{project.type}</span>
+                                        </div>
                                     </div>
-                                    <div className="p-4">
-                                        <h4 className="font-semibold text-slate-900 group-hover:text-primary transition-colors">Coffee Brand Identity</h4>
-                                        <span className="text-xs text-slate-500">Logo Design, Packaging</span>
-                                    </div>
-                                </div>
-
-                                {/* Mock Project Card 2 */}
-                                <div className="group border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
-                                    <div className="h-32 bg-slate-200 relative">
-                                        <div className="absolute inset-0 flex items-center justify-center text-slate-400">Project Image</div>
-                                    </div>
-                                    <div className="p-4">
-                                        <h4 className="font-semibold text-slate-900 group-hover:text-primary transition-colors">Event Poster Series</h4>
-                                        <span className="text-xs text-slate-500">Illustration, Print</span>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -157,3 +277,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

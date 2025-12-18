@@ -12,7 +12,7 @@ const Register = () => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-            navigate('/dashboard');
+            navigate('/setup-profile');
         }, 1000);
     };
 
