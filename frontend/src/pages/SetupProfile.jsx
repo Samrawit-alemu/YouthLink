@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import ProfileForm from '../components/ProfileForm';
 import EmployerProfileForm from '../components/EmployerProfileForm';
 
 const SetupProfile = () => {
     const navigate = useNavigate();
-    const [accountType, setAccountType] = useState('seeker'); // 'seeker' or 'employer'
+    const location = useLocation();
+
+    // Determine account type from previous step, default to 'seeker' (jobseeker)
+    const initialAccountType = location.state?.role === 'employer' ? 'employer' : 'seeker';
+    const [accountType, setAccountType] = useState(initialAccountType);
 
     // Initial empty state for Seeker
     const [seekerUser, setSeekerUser] = useState({
         name: "",
-        role: "Student",
+        role: "Job Seeker",
         title: "",
         location: "",
         email: "",
@@ -60,30 +64,6 @@ const SetupProfile = () => {
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold text-slate-900">Welcome to YouthThink!</h1>
                     <p className="mt-2 text-slate-600">Let's set up your profile.</p>
-                </div>
-
-                {/* Account Type Toggle */}
-                <div className="flex justify-center mb-8">
-                    <div className="bg-white p-1 rounded-lg border border-gray-200 shadow-sm inline-flex">
-                        <button
-                            onClick={() => setAccountType('seeker')}
-                            className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${accountType === 'seeker'
-                                    ? 'bg-primary text-white shadow-sm'
-                                    : 'text-slate-600 hover:bg-slate-50'
-                                }`}
-                        >
-                            Job Seeker
-                        </button>
-                        <button
-                            onClick={() => setAccountType('employer')}
-                            className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${accountType === 'employer'
-                                    ? 'bg-primary text-white shadow-sm'
-                                    : 'text-slate-600 hover:bg-slate-50'
-                                }`}
-                        >
-                            Employer
-                        </button>
-                    </div>
                 </div>
 
                 {accountType === 'seeker' ? (

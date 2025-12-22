@@ -4,7 +4,7 @@ import { GraduationCap } from 'lucide-react';
 
 const Register = () => {
     const navigate = useNavigate();
-    const [role, setRole] = useState('student');
+    const [role, setRole] = useState('jobseeker');
     const [loading, setLoading] = useState(false);
 
     const handleRegister = (e) => {
@@ -12,7 +12,7 @@ const Register = () => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-            navigate('/setup-profile');
+            navigate('/setup-profile', { state: { role } });
         }, 1000);
     };
 
@@ -33,10 +33,10 @@ const Register = () => {
 
                 <div className="flex bg-slate-100 p-1 rounded-lg">
                     <button
-                        onClick={() => setRole('student')}
-                        className={`flex-1 flex items-center justify-center py-2 text-sm font-medium rounded-md transition-all ${role === 'student' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                        onClick={() => setRole('jobseeker')}
+                        className={`flex-1 flex items-center justify-center py-2 text-sm font-medium rounded-md transition-all ${role === 'jobseeker' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                     >
-                        I'm a Student
+                        I'm a Jobseeker
                     </button>
                     <button
                         onClick={() => setRole('employer')}
@@ -77,17 +77,7 @@ const Register = () => {
                         />
                     </div>
 
-                    {role === 'student' && (
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">University / College</label>
-                            <input
-                                name="university"
-                                type="text"
-                                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-                                placeholder="e.g. Addis Ababa University"
-                            />
-                        </div>
-                    )}
+
 
                     {role === 'employer' && (
                         <div>

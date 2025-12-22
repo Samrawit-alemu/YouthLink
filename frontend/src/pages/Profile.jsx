@@ -11,7 +11,7 @@ const Profile = () => {
     // Mock User Data for Seeker
     const [seekerUser, setSeekerUser] = useState({
         name: "Abel Kebede",
-        role: "Student",
+        role: "Job Seeker",
         title: "Graphic Design Student @ AAU",
         location: "Addis Ababa, Ethiopia",
         email: "abel.kebede@example.com",
@@ -71,7 +71,7 @@ const Profile = () => {
 
     if (isEditing) {
         return (
-            <div className="bg-slate-50 min-h-screen py-10">
+            <div className="bg-slate-50 py-10">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     {userType === 'employer' ? (
                         <EmployerProfileForm
@@ -95,9 +95,8 @@ const Profile = () => {
         return <EmployerProfileView user={employerUser} onEdit={() => setIsEditing(true)} />;
     }
 
-    // Default Seeker View
     return (
-        <div className="bg-slate-50 min-h-screen py-10">
+        <div className="bg-slate-50 py-10">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Profile Header */}
@@ -125,11 +124,7 @@ const Profile = () => {
                                     <MapPin className="h-4 w-4 mr-1" /> {seekerUser.location}
                                 </div>
 
-                                <div className="flex gap-2">
-                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light/10 text-primary">
-                                        {seekerUser.role}
-                                    </span>
-                                </div>
+
                             </div>
                             <div className="flex gap-3">
                                 <button className="px-4 py-2 border border-gray-300 rounded-lg text-slate-700 hover:bg-slate-50 font-medium transition-colors">

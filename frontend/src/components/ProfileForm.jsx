@@ -98,16 +98,7 @@ const ProfileForm = ({ user, onSave, onCancel }) => {
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                             />
                         </div>
-                        <div className="space-y-1">
-                            <label className="text-sm font-medium text-slate-700">Role</label>
-                            <input
-                                type="text"
-                                name="role"
-                                value={formData.role}
-                                onChange={handleChange}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                            />
-                        </div>
+
                         <div className="space-y-1">
                             <label className="text-sm font-medium text-slate-700">Location</label>
                             <div className="relative">

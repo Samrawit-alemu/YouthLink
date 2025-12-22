@@ -4,7 +4,6 @@ import { GraduationCap, Briefcase } from 'lucide-react';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [role, setRole] = useState('student'); // 'student' or 'employer'
     const [loading, setLoading] = useState(false);
 
     const handleLogin = (e) => {
@@ -32,20 +31,6 @@ const Login = () => {
                     </p>
                 </div>
 
-                <div className="flex bg-slate-100 p-1 rounded-lg">
-                    <button
-                        onClick={() => setRole('student')}
-                        className={`flex-1 flex items-center justify-center py-2 text-sm font-medium rounded-md transition-all ${role === 'student' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                        Startups / Students
-                    </button>
-                    <button
-                        onClick={() => setRole('employer')}
-                        className={`flex-1 flex items-center justify-center py-2 text-sm font-medium rounded-md transition-all ${role === 'employer' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                        Employers
-                    </button>
-                </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleLogin}>
                     <div className="rounded-md shadow-sm -space-y-px">
