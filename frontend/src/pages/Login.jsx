@@ -12,12 +12,20 @@ const Login = () => {
         // Mock login delay
         setTimeout(() => {
             setLoading(false);
+
+            // Simple mock logic for testing:
+            // In a real app, the backend would return the user's role.
+            // For now, if the email contains "employer", we treat them as an employer.
+            const email = e.target.email.value;
+            const role = email.includes('employer') ? 'employer' : 'jobseeker';
+
+            localStorage.setItem('userRole', role);
             navigate('/dashboard');
         }, 1000);
     };
 
     return (
-        <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
                 <div className="text-center">
                     <div className="flex justify-center mb-4">

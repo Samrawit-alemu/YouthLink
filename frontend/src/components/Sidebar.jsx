@@ -4,6 +4,7 @@ import { LayoutDashboard, User, Briefcase, FileText, Settings } from 'lucide-rea
 
 const Sidebar = () => {
     const location = useLocation();
+    const userRole = localStorage.getItem('userRole') || 'jobseeker';
 
     const isActive = (path) => location.pathname === path;
 
@@ -27,27 +28,57 @@ const Sidebar = () => {
                     <LayoutDashboard size={20} />
                     Dashboard
                 </Link>
-                <Link
-                    to="/profile"
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/profile') ? 'bg-blue-50 text-primary' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
-                >
-                    <User size={20} />
-                    My Profile
-                </Link>
-                <Link
-                    to="/jobs"
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/jobs') ? 'bg-blue-50 text-primary' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
-                >
-                    <Briefcase size={20} />
-                    Browse Jobs
-                </Link>
-                <Link
-                    to="#"
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/applications') ? 'bg-blue-50 text-primary' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
-                >
-                    <FileText size={20} />
-                    My Applications
-                </Link>
+
+                {userRole === 'employer' ? (
+                    <>
+                        <Link
+                            to="/post-job"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/post-job') ? 'bg-blue-50 text-primary' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                        >
+                            <Briefcase size={20} />
+                            Post a Job
+                        </Link>
+                        <Link
+                            to="/my-jobs"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/my-jobs') ? 'bg-blue-50 text-primary' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                        >
+                            <FileText size={20} />
+                            My Jobs
+                        </Link>
+                        <Link
+                            to="/candidates"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/candidates') ? 'bg-blue-50 text-primary' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                        >
+                            <User size={20} />
+                            Candidates
+                        </Link>
+                    </>
+                ) : (
+                    <>
+                        <Link
+                            to="/profile"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/profile') ? 'bg-blue-50 text-primary' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                        >
+                            <User size={20} />
+                            My Profile
+                        </Link>
+                        <Link
+                            to="/jobs"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/jobs') ? 'bg-blue-50 text-primary' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                        >
+                            <Briefcase size={20} />
+                            Browse Jobs
+                        </Link>
+                        <Link
+                            to="#"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/applications') ? 'bg-blue-50 text-primary' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                        >
+                            <FileText size={20} />
+                            My Applications
+                        </Link>
+                    </>
+                )}
+
                 <Link
                     to="#"
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/settings') ? 'bg-blue-50 text-primary' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}

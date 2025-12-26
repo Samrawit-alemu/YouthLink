@@ -7,6 +7,7 @@ import Jobs from './pages/Jobs';
 import JobDetail from './pages/JobDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ApplyJob from './pages/ApplyJob';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import SetupProfile from './pages/SetupProfile';
@@ -17,10 +18,13 @@ function App() {
             {/* Public Layout Routes */}
             <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
-                <Route path="login" element={<Login />} />
-                <Route path="register" element={<Register />} />
                 <Route path="setup-profile" element={<SetupProfile />} />
             </Route>
+
+            <Route path="/login" element={<Login />} />
+
+            <Route path="/register" element={<Register />} />
+            <Route path="/jobs/:id/apply" element={<ApplyJob />} />
 
             {/* Authenticated Dashboard Routes */}
             <Route element={<DashboardLayout />}>

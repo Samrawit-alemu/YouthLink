@@ -2,8 +2,16 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LayoutDashboard, User, Briefcase, FileText, Settings, Bell, Search, GraduationCap } from 'lucide-react';
 import { JOBS } from '../lib/mockData';
+import EmployerDashboard from './EmployerDashboard';
 
 const Dashboard = () => {
+    // Check user role from localStorage (mock auth)
+    const userRole = localStorage.getItem('userRole') || 'jobseeker';
+
+    if (userRole === 'employer') {
+        return <EmployerDashboard />;
+    }
+
     // Determine status color helper
     const getStatusColor = (status) => {
         switch (status) {
@@ -110,7 +118,7 @@ const Dashboard = () => {
                                     <span className="block font-bold text-slate-900">{job.budget}</span>
                                     <span className="text-xs text-slate-400">/month</span>
                                 </div>
-                                <Link to={`/jobs/${job.id}`} className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-hover transition-colors">
+                                <Link to={`/jobs/${job.id}/apply`} className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-hover transition-colors">
                                     Apply Now
                                 </Link>
                             </div>
