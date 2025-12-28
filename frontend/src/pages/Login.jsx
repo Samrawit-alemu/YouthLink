@@ -4,7 +4,6 @@ import { GraduationCap, Briefcase } from 'lucide-react';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [role, setRole] = useState('student'); // 'student' or 'employer'
     const [loading, setLoading] = useState(false);
 
     const handleLogin = (e) => {
@@ -13,12 +12,20 @@ const Login = () => {
         // Mock login delay
         setTimeout(() => {
             setLoading(false);
+
+            // Simple mock logic for testing:
+            // In a real app, the backend would return the user's role.
+            // For now, if the email contains "employer", we treat them as an employer.
+            const email = e.target.email.value;
+            const role = email.includes('employer') ? 'employer' : 'jobseeker';
+
+            localStorage.setItem('userRole', role);
             navigate('/dashboard');
         }, 1000);
     };
 
     return (
-        <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
                 <div className="text-center">
                     <div className="flex justify-center mb-4">
@@ -32,20 +39,6 @@ const Login = () => {
                     </p>
                 </div>
 
-                <div className="flex bg-slate-100 p-1 rounded-lg">
-                    <button
-                        onClick={() => setRole('student')}
-                        className={`flex-1 flex items-center justify-center py-2 text-sm font-medium rounded-md transition-all ${role === 'student' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                        Startups / Students
-                    </button>
-                    <button
-                        onClick={() => setRole('employer')}
-                        className={`flex-1 flex items-center justify-center py-2 text-sm font-medium rounded-md transition-all ${role === 'employer' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                        Employers
-                    </button>
-                </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleLogin}>
                     <div className="rounded-md shadow-sm -space-y-px">

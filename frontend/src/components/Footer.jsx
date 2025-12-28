@@ -15,7 +15,7 @@ const Footer = () => {
                             <span className="font-bold text-xl text-white">Youth<span className="text-primary-light">Link</span></span>
                         </Link>
                         <p className="text-sm text-slate-400 mb-6">
-                            Empowering Ethiopian students and graduates by connecting them with local opportunities.
+                            Empowering Ethiopian job seekers and graduates by connecting them with local opportunities.
                         </p>
                         <div className="flex space-x-4">
                             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Facebook size={20} /></a>
@@ -28,8 +28,6 @@ const Footer = () => {
                     <div>
                         <h3 className="text-white font-semibold mb-4">Platform</h3>
                         <ul className="space-y-2 text-sm">
-                            <li><Link to="/jobs" className="hover:text-primary-light transition-colors">Find Gigs</Link></li>
-                            <li><Link to="/post-job" className="hover:text-primary-light transition-colors">Post a Job</Link></li>
                             <li><Link to="/talent" className="hover:text-primary-light transition-colors">Browse Talent</Link></li>
                             <li><Link to="/pricing" className="hover:text-primary-light transition-colors">Pricing</Link></li>
                         </ul>

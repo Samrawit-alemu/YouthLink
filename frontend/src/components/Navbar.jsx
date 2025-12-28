@@ -10,8 +10,6 @@ const Navbar = () => {
 
     const navLinks = [
         { name: 'Home', path: '/' },
-        { name: 'Find Gigs', path: '/jobs' },
-        { name: 'For Employers', path: '/post-job' }, // Placeholder path
     ];
 
     return (
@@ -33,8 +31,8 @@ const Navbar = () => {
                                 key={link.name}
                                 to={link.path}
                                 className={`text-sm font-medium transition-colors duration-200 ${isActive(link.path)
-                                        ? 'text-primary'
-                                        : 'text-gray-600 hover:text-primary'
+                                    ? 'text-primary'
+                                    : 'text-gray-600 hover:text-primary'
                                     }`}
                             >
                                 {link.name}
@@ -74,8 +72,8 @@ const Navbar = () => {
                                 to={link.path}
                                 onClick={() => setIsOpen(false)}
                                 className={`block px-3 py-2 rounded-md text-base font-medium ${isActive(link.path)
-                                        ? 'text-primary bg-primary/5'
-                                        : 'text-gray-600 hover:text-primary'
+                                    ? 'text-primary bg-primary/5'
+                                    : 'text-gray-600 hover:text-primary'
                                     }`}
                             >
                                 {link.name}

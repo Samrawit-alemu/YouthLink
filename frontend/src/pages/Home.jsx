@@ -15,7 +15,7 @@ const Home = () => {
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
                     <span className="inline-block py-1 px-3 rounded-full bg-primary/10 text-primary font-semibold text-sm mb-6">
-                        For Ethiopian Students & Graduates
+                        For Ethiopian Job Seekers & Graduates
                     </span>
                     <h1 className="text-5xl md:text-6xl font-bold text-slate-900 tracking-tight mb-6">
                         Find Work That Matters. <br />
@@ -25,14 +25,14 @@ const Home = () => {
                     </h1>
                     <p className="max-w-2xl mx-auto text-xl text-slate-600 mb-10 leading-relaxed">
                         Connect with local businesses for freelance gigs, internships, and part-time jobs.
-                        Gain experience while you study.
+                        Gain experience while you build your career.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <Link to="/jobs" className="px-8 py-4 bg-primary text-white text-lg font-semibold rounded-full shadow-lg hover:bg-primary-hover hover:shadow-xl transition-all transform hover:-translate-y-1">
+                        <Link to="/register" className="px-8 py-4 bg-primary text-white text-lg font-semibold rounded-full shadow-lg hover:bg-primary-hover hover:shadow-xl transition-all transform hover:-translate-y-1">
                             Find Opportunities
                         </Link>
-                        <Link to="/post-job" className="px-8 py-4 bg-white text-slate-700 border border-slate-200 text-lg font-semibold rounded-full shadow-sm hover:border-primary/50 hover:text-primary transition-all">
+                        <Link to="/register" className="px-8 py-4 bg-white text-slate-700 border border-slate-200 text-lg font-semibold rounded-full shadow-sm hover:border-primary/50 hover:text-primary transition-all">
                             Post a Job
                         </Link>
                     </div>
@@ -44,7 +44,7 @@ const Home = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                     <div>
                         <div className="text-3xl font-bold text-primary-light mb-1">500+</div>
-                        <div className="text-slate-400 text-sm">Active Students</div>
+                        <div className="text-slate-400 text-sm">Active Job Seekers</div>
                     </div>
                     <div>
                         <div className="text-3xl font-bold text-primary-light mb-1">200+</div>

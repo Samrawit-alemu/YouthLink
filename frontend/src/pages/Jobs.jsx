@@ -33,7 +33,7 @@ const Jobs = () => {
     };
 
     return (
-        <div className="bg-slate-50 min-h-screen py-10">
+        <div className="bg-slate-50 py-10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header & Search */}
                 <div className="mb-10 text-center max-w-3xl mx-auto">

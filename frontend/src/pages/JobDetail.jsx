@@ -7,7 +7,7 @@ const JobDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const job = JOBS.find(j => j.id === parseInt(id));
-    const [isApplying, setIsApplying] = useState(false);
+
 
     if (!job) {
         return (
@@ -22,16 +22,7 @@ const JobDetail = () => {
         );
     }
 
-    const handleApply = (e) => {
-        e.preventDefault();
-        // Mock submission
-        setIsApplying(true);
-        setTimeout(() => {
-            alert('Application submitted successfully! (Mock)');
-            setIsApplying(false);
-            navigate('/dashboard');
-        }, 1500);
-    };
+
 
     return (
         <div className="bg-slate-50 min-h-screen py-10">
@@ -62,12 +53,12 @@ const JobDetail = () => {
                                 <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-500">
                                     <Share2 className="h-5 w-5" />
                                 </button>
-                                <button
-                                    onClick={() => document.getElementById('apply-section').scrollIntoView({ behavior: 'smooth' })}
-                                    className="px-6 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-primary-hover shadow-lg shadow-primary/30 transition-all"
+                                <Link
+                                    to={`/jobs/${job.id}/apply`}
+                                    className="px-6 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-primary-hover shadow-lg shadow-primary/30 transition-all inline-block"
                                 >
                                     Apply Now
-                                </button>
+                                </Link>
                             </div>
                         </div>
 
@@ -144,29 +135,7 @@ const JobDetail = () => {
 
                         <div className="h-px bg-gray-100 my-8" />
 
-                        {/* Application Section */}
-                        <div id="apply-section" className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                            <h2 className="text-xl font-bold text-slate-900 mb-4">Apply for this position</h2>
-                            <form onSubmit={handleApply} className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1">Cover Letter / Note</label>
-                                    <textarea
-                                        required
-                                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-3 h-32"
-                                        placeholder="Tell the employer why you are a good fit..."
-                                    ></textarea>
-                                </div>
-                                <div className="flex items-center justify-end">
-                                    <button
-                                        type="submit"
-                                        disabled={isApplying}
-                                        className="px-8 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-hover shadow-lg disabled:opacity-70 disabled:cursor-not-allowed transition-all"
-                                    >
-                                        {isApplying ? 'Submitting...' : 'Submit Application'}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+
                     </div>
                 </div>
             </div>
