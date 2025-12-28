@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['jobseeker', 'employer'],
+        enum: ['jobseeker', 'employer', 'admin'],
         required: true
     },
     // 2. common profile info
@@ -53,7 +53,7 @@ const UserSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true,
+        // required: true,
         validate: function (v) {
             return /^(\+251|0)(9|7)[0-9]{8}$/.test(v)
         },

@@ -44,9 +44,34 @@ exports.createJob = async (req, res) => {
 
 exports.getAllJobs = async (req, res) => {
     try {
-        const jobs = await Job.find()
+        const { keyword, location, category } = req.query
+        // start with empty filter object
+        let queryObject = {}
+        // Build the filter
+        // 1. Keyword Search (title or description)
+        if (keyword) {
+            // $or to search either title or description
+            queryObject.$or = [
+                { title: { $regex: keyword, $options: 'i' } }, // 'i' = case insensitive
+                { description: { $regex: keyword, $options: 'i' } }
+            ]
+        }
+
+        // 2. Location filter
+        if (location) {
+            // $regex to make partial search
+            queryObject.location = { $regex: location, $options: 'i' }
+        }
+
+        // 3. Category filter (exact no partial)
+        if (category) {
+            queryObject.category = category
+        }
+
+        const jobs = await Job.find(queryObject)
             .populate('employer', 'name companyName email')
             .populate('category', 'name')
+            .sort({ createdAt: -1 }) //newest job first
         res.json(jobs)
     } catch (error) {
         console.error(error)

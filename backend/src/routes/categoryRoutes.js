@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { createCategory, getAllCategory } = require('../controllers/categoryController.js')
-const { protect } = require('../middleware/authMiddleware')
+const { protect, authorizeAdmin } = require('../middleware/authMiddleware')
 
 /**
  * @openapi
@@ -31,7 +31,7 @@ const { protect } = require('../middleware/authMiddleware')
  *       401:
  *         description: Not Authorized (Token Missing/Invalid)
  */
-router.post('/', protect, createCategory)
+router.post('/', protect, authorizeAdmin, createCategory)
 
 /**
  * @openapi
