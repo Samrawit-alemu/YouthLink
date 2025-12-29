@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ApplyJob from './pages/ApplyJob';
 import Dashboard from './pages/Dashboard';
+import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
 import SetupProfile from './pages/SetupProfile';
 
@@ -29,6 +30,7 @@ function App() {
             {/* Authenticated Dashboard Routes */}
             <Route element={<DashboardLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/admin/users" element={<AdminDashboard />} />
                 <Route path="/jobs" element={<Jobs />} />
                 <Route path="/jobs/:id" element={<JobDetail />} />
                 <Route path="/profile" element={<Profile />} />

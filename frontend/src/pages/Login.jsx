@@ -1,28 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { GraduationCap, Briefcase } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { auth } from '../firebase';
+import axios from 'axios';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [
+        signInWithEmailAndPassword,
+        user,
+        loading,
+        error,
+    ] = useSignInWithEmailAndPassword(auth);
+
+    const [
+        signInWithGoogle,
+        googleUser,
+        googleLoading,
+        googleError,
+    ] = useSignInWithGoogle(auth);
 
     const handleLogin = (e) => {
         e.preventDefault();
-        setLoading(true);
-        // Mock login delay
-        setTimeout(() => {
-            setLoading(false);
-
-            // Simple mock logic for testing:
-            // In a real app, the backend would return the user's role.
-            // For now, if the email contains "employer", we treat them as an employer.
-            const email = e.target.email.value;
-            const role = email.includes('employer') ? 'employer' : 'jobseeker';
-
-            localStorage.setItem('userRole', role);
-            navigate('/dashboard');
-        }, 1000);
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        signInWithEmailAndPassword(email, password);
     };
+
+    const handleGoogleLogin = async () => {
+        await signInWithGoogle();
+    };
+
+    useEffect(() => {
+        if (user || googleUser) {
+            const currentUser = user?.user || googleUser?.user;
+            if (googleUser) {
+                // Sync with backend for Google Login
+                currentUser.getIdToken().then(token => {
+                    axios.post('/api/register', { token })
+                        .catch(err => console.error("Backend sync error", err));
+                });
+            }
+            navigate('/dashboard');
+        }
+    }, [user, googleUser, navigate]);
+
+    if (error || googleError) {
+        // You might want to display this error in the UI
+        console.error(error || googleError);
+    }
+
+    const isLoading = loading || googleLoading;
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -86,13 +115,31 @@ const Login = () => {
                         </div>
                     </div>
 
+                    {(error || googleError) && (
+                        <div className="text-red-500 text-sm text-center">
+                            {(error || googleError).message}
+                        </div>
+                    )}
+
                     <div>
                         <button
                             type="submit"
-                            disabled={loading}
+                            disabled={isLoading}
                             className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all shadow-md hover:shadow-lg disabled:opacity-70"
                         >
-                            {loading ? 'Signing in...' : 'Sign in'}
+                            {isLoading ? 'Signing in...' : 'Sign in'}
+                        </button>
+                    </div>
+
+                    {/* Google Login Button (added to Login as well since it was in Register) */}
+                    <div className="mt-4">
+                        <button
+                            type="button"
+                            onClick={handleGoogleLogin}
+                            disabled={isLoading}
+                            className="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all"
+                        >
+                            Sign in with Google
                         </button>
                     </div>
                 </form>

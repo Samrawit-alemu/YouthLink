@@ -1,22 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Briefcase, Users, TrendingUp, Eye, EyeOff } from 'lucide-react';
+import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { auth } from '../firebase';
+import axios from 'axios';
 
 const Register = () => {
     const navigate = useNavigate();
     const [role, setRole] = useState('jobseeker');
-    const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleRegister = (e) => {
+    // Email/Password Signup Hook
+    const [
+        createUserWithEmailAndPassword,
+        user,
+        loading,
+        error,
+    ] = useCreateUserWithEmailAndPassword(auth);
+
+    // Google Signup Hook (uses Popup by default)
+    const [
+        signInWithGoogle,
+        googleUser,
+        googleLoading,
+        googleError,
+    ] = useSignInWithGoogle(auth);
+
+    const handleRegister = async (e) => {
         e.preventDefault();
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            localStorage.setItem('userRole', role);
-            navigate('/setup-profile', { state: { role } });
-        }, 1000);
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        // Optionally pass name to backend or update profile later
+        await createUserWithEmailAndPassword(email, password);
     };
+
+    const handleGoogleRegister = async () => {
+        await signInWithGoogle();
+    };
+
+    useEffect(() => {
+        const currentUser = user?.user || googleUser?.user;
+        if (currentUser) {
+            // Sync with backend
+            currentUser.getIdToken().then(token => {
+                axios.post('/api/register', { token, role })
+                    .then(() => {
+                        console.log("Backend sync successful");
+                    })
+                    .catch(err => {
+                        console.error("Backend sync error", err);
+                        // Depending on reqs, might want to block nav or show error
+                    })
+                    .finally(() => {
+                        // Decide where to go.
+                        // Design implies 'setup-profile' is next step.
+                        navigate('/setup-profile', { state: { role } });
+                    });
+            });
+        }
+    }, [user, googleUser, navigate, role]);
+
+    const isLoading = loading || googleLoading;
+    const authError = error || googleError;
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
@@ -155,12 +200,18 @@ const Register = () => {
                                 By creating an account, you agree to our <a href="#" className="font-medium text-primary hover:text-primary-hover">Terms of Service</a>.
                             </div>
 
+                            {authError && (
+                                <div className="text-red-500 text-sm text-center">
+                                    {authError.message}
+                                </div>
+                            )}
+
                             <button
                                 type="submit"
-                                disabled={loading}
+                                disabled={isLoading}
                                 className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-[0_10px_40px_-10px_rgba(37,99,235,0.4)] text-sm font-semibold text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed transform hover:-translate-y-0.5"
                             >
-                                {loading ? 'Creating Account...' : 'Create Account'}
+                                {isLoading ? 'Creating Account...' : 'Create Account'}
                             </button>
                         </form>
 
@@ -176,6 +227,8 @@ const Register = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <button
                                 type="button"
+                                onClick={handleGoogleRegister}
+                                disabled={isLoading}
                                 className="flex items-center justify-center w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 transition-all duration-200"
                             >
                                 <svg className="h-5 w-5 mr-3" aria-hidden="true" viewBox="0 0 24 24">

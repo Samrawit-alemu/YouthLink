@@ -53,6 +53,30 @@ const Sidebar = () => {
                             Candidates
                         </Link>
                     </>
+                ) : userRole === 'admin' ? (
+                    <>
+                        <Link
+                            to="/admin/users"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/admin/users') ? 'bg-cyan-50 text-cyan-500' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                        >
+                            <User size={20} />
+                            Users
+                        </Link>
+                        <Link
+                            to="#"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/admin/jobs') ? 'bg-cyan-50 text-cyan-500' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                        >
+                            <Briefcase size={20} />
+                            Jobs
+                        </Link>
+                        <Link
+                            to="#"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-medium ${isActive('/admin/reports') ? 'bg-cyan-50 text-cyan-500' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+                        >
+                            <FileText size={20} />
+                            Reports
+                        </Link>
+                    </>
                 ) : (
                     <>
                         <Link
