@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const { applyForJob, getJobApplications, getMyApplications } = require('../controllers/applicationController')
-const { protect } = require('../middleware/authMiddleware')
+const { applyForJob, getJobApplications, getMyApplications, updateApplicationStatus } = require('../controllers/applicationController')
+const { protect, authorizeEmployer } = require('../middleware/authMiddleware')
 
 /**
  * @openapi
@@ -104,5 +104,45 @@ router.get('/job/:jobId', protect, getJobApplications)
  *         description: Not Authorized (Token Missing/Invalid)
  */
 router.get('/user/:userId', protect, getMyApplications)
+
+/**
+ * @openapi
+ * /api/applications/{id}/status:
+ *   put:
+ *     summary: Update application status (Employer Only)
+ *     tags: [Applications]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - status
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [pending, viewed, accepted, rejected]
+ *     responses:
+ *       200:
+ *         description: Status updated
+ *       403:
+ *         description: Not authorized (Not the job owner)
+ */
+// console.log("1. protect:", protect);
+// console.log("2. authorizeEmployer:", authorizeEmployer);
+// console.log("3. updateApplicationStatus:", updateApplicationStatus);
+
+// The line that crashes
+router.put('/:id/status', protect, authorizeEmployer, updateApplicationStatus);
+router.put('/:id/status', protect, authorizeEmployer, updateApplicationStatus)
 
 module.exports = router

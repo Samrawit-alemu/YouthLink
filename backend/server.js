@@ -12,7 +12,7 @@ app.use(express.json());
 app.use('/api/users', require('./src/routes/userRoutes'))
 app.use('/api/categories', require('./src/routes/categoryRoutes'))
 app.use('/api/applications', require('./src/routes/applicationRoutes'))
-app.use('/api/job', require('./src/routes/jobRoutes'))
+app.use('/api/jobs', require('./src/routes/jobRoutes'))
 
 connectDB();
 
